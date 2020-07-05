@@ -28,14 +28,14 @@ let storage = multer.diskStorage({
 
 let upload = multer({ storage }).single('file');
 
-router.post('/uploadfiles', auth, (req, res) => {
-  upload((req, res, err) => {
+router.post('/uploadfiles', (req, res) => {
+  upload(req, res, (err) => {
     if (err) {
       return res.json({ success: false, err });
     }
     return res.json({
       success: true,
-      filePath: req.res.file.path,
+      filePath: res.req.file.path,
       fileName: res.req.file.filename
     });
   });

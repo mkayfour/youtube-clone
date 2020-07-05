@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Typography, Button, Form, Input, Icon, message } from 'antd';
 import Dropzone from 'react-dropzone';
-import { response } from 'express';
+// import { response } from 'express';
 import axios from 'axios';
 
 const { Title } = Typography;
@@ -24,6 +24,7 @@ function UploadVideoPage() {
   const [description, setDescription] = useState('');
   const [privacy, setPrivacy] = useState(0);
   const [categories, setCategories] = useState('Film & Animation');
+  const [filePath, setFilePath] = useState('');
 
   const handleChangeTitle = (e) => {
     setTitle(e.target.value);
@@ -46,20 +47,33 @@ function UploadVideoPage() {
   };
 
   const onDrop = (files) => {
-    // let formData = new FormData();
-    // const config = {
-    //   header: { 'content-type': 'multipart/form-data' }
-    // };
-    // console.log(files[0]);
-    // formData.append('file', files[0]);
+    // files.preventDefault();
 
-    // axios.post('/api/video/uploadfiles', formData, config).then((response) => {
-    //   if (response.data.success) {
-    //     console.log(response);
-    //   } else {
-    //     alert('Failed to upload video');
-    //   }
-    // });
+    let formData = new FormData();
+    const config = {
+      header: { 'content-type': 'multipart/form-data' }
+    };
+    console.log(files[0]);
+    formData.append('file', files[0]);
+
+    axios
+      .post('/api/video/uploadfiles', formData, config)
+      .then((response) => {
+        console.log(response.data.err)
+        if (response.data.success) {
+          console.log(response);
+          let variable = {
+            filePath: response.data.filePath,
+            fileName: response.data.fileName
+          };
+
+          setFilePath(response.data.filePath);
+        }
+        // else {
+        //   alert('Failed to upload video');
+        // }
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -75,8 +89,12 @@ function UploadVideoPage() {
                 style={{
                   width: '300px',
                   height: '240px',
-                  border: '1px solid lightgray'
+                  border: '1px solid lightgray',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
                 }}
+                {...getRootProps()}
               >
                 <input {...getInputProps()} />
                 <Icon type='plus' style={{ fontSize: '3rem' }} />
