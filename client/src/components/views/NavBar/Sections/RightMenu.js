@@ -5,7 +5,6 @@ import axios from 'axios';
 import { USER_SERVER } from '../../../Config';
 import { withRouter } from 'react-router-dom';
 import { useSelector } from "react-redux";
-const Upload = require('../../../../assets/images/upload.png');
 
 function RightMenu(props) {
   const user = useSelector(state => state.user)
@@ -34,9 +33,6 @@ function RightMenu(props) {
   } else {
     return (
       <Menu mode={props.mode}>
-        <Menu.Item key="create">
-          <a href="/video/upload"><img src={Upload} alt="Upload" /></a>
-        </Menu.Item>
         <Menu.Item key="logout">
           <a onClick={logoutHandler}>Logout</a>
         </Menu.Item>
